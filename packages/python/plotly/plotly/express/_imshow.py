@@ -16,24 +16,43 @@ except ImportError:
 
 _float_types = []
 
+branch_coverage = {
+    "_vectorize_zvalue_none": False,
+    "_vectorize_zvalue_scalar": False,
+    "_vectorize_zvalue_len_1": False,
+    "_vectorize_zvalue_len_3": False,
+    "_vectorize_zvalue_len_4": False,
+    "_vectorize_zvalue_else": False
+}
 
 def _vectorize_zvalue(z, mode="max"):
     alpha = 255 if mode == "max" else 0
     if z is None:
+        branch_coverage["_vectorize_zvalue_none"] = True
         return z
     elif np.isscalar(z):
+        branch_coverage["_vectorize_zvalue_scalar"] = True
         return [z] * 3 + [alpha]
     elif len(z) == 1:
+        branch_coverage["_vectorize_zvalue_len_1"] = True
         return list(z) * 3 + [alpha]
     elif len(z) == 3:
+        branch_coverage["_vectorize_zvalue_len_3"] = True
         return list(z) + [alpha]
     elif len(z) == 4:
+        branch_coverage["_vectorize_zvalue_len_4"] = True
         return z
     else:
+        branch_coverage["_vectorize_zvalue_else"] = True
         raise ValueError(
             "zmax can be a scalar, or an iterable of length 1, 3 or 4. "
             "A value of %s was passed for zmax." % str(z)
         )
+
+def print_coverage_to_file(filepath='coverage.txt'):
+    with open(filepath, 'w') as file:
+        for branch, hit in branch_coverage.items():
+            file.write(f"{branch}: {'hit' if hit else 'not hit'}\n")
 
 
 def _infer_zmax_from_type(img):
