@@ -1,0 +1,5 @@
+not_flipped_col: hit
+not_flipped_row: hit
+flipped_col: hit
+flipped_row_right_side: hit
+flipped_row_left_side: hit

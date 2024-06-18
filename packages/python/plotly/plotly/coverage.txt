@@ -1,0 +1,6 @@
+_vectorize_zvalue_none: hit
+_vectorize_zvalue_scalar: hit
+_vectorize_zvalue_len_1: hit
+_vectorize_zvalue_len_3: hit
+_vectorize_zvalue_len_4: hit
+_vectorize_zvalue_else: hit
