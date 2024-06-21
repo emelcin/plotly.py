@@ -44,6 +44,12 @@ PLOT_OPTIONS = {
 
 SHARING_OPTIONS = ["public", "private", "secret"]
 
+branch_coverage = {
+    "f1": False,
+    "f2": False,
+    "f3": False,
+    "f4": False
+}
 
 def sign_in(username, api_key, **kwargs):
     """
@@ -73,6 +79,7 @@ def sign_in(username, api_key, **kwargs):
     # raise error if key isn't valid anywhere
     for key in kwargs:
         if key not in CREDENTIALS_KEYS and key not in CONFIG_KEYS:
+            branch_coverage["f1"] = True
             raise _plotly_utils.exceptions.PlotlyError(
                 "{} is not a valid config or credentials key".format(key)
             )
@@ -81,6 +88,7 @@ def sign_in(username, api_key, **kwargs):
     for key in CREDENTIALS_KEYS:
         if key in kwargs:
             if not isinstance(kwargs[key], CREDENTIALS_KEYS[key]):
+                branch_coverage["f2"] = True
                 raise _plotly_utils.exceptions.PlotlyError(
                     "{} must be of type '{}'".format(key, CREDENTIALS_KEYS[key])
                 )
@@ -90,6 +98,7 @@ def sign_in(username, api_key, **kwargs):
     for key in CONFIG_KEYS:
         if key in kwargs:
             if not isinstance(kwargs[key], CONFIG_KEYS[key]):
+                branch_coverage["f3"] = True
                 raise _plotly_utils.exceptions.PlotlyError(
                     "{} must be of type '{}'".format(key, CONFIG_KEYS[key])
                 )
@@ -99,6 +108,7 @@ def sign_in(username, api_key, **kwargs):
     for key in PLOT_OPTIONS:
         if key in kwargs:
             if not isinstance(kwargs[key], CONFIG_KEYS[key]):
+                branch_coverage["f4"] = True
                 raise _plotly_utils.exceptions.PlotlyError(
                     "{} must be of type '{}'".format(key, CONFIG_KEYS[key])
                 )

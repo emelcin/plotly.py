@@ -115,15 +115,23 @@ def get_headers():
 
     return headers
 
+branch_coverage = {
+    "f1": False,  
+    "f2": False,
+    "f3": False
+}
 
 def should_retry(exception):
     if isinstance(exception, exceptions.PlotlyRequestError):
+        branch_coverage["f1"] = True
         if isinstance(exception.status_code, int) and (
             500 <= exception.status_code < 600 or exception.status_code == 429
         ):
             # Retry on 5XX and 429 (image export throttling) errors.
+            branch_coverage["f2"] = True
             return True
         elif "Uh oh, an error occurred" in exception.message:
+            branch_coverage["f3"] = True
             return True
 
     return False

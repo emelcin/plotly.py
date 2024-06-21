@@ -9,6 +9,7 @@ from chart_studio.api.v2 import utils
 from chart_studio.exceptions import PlotlyRequestError
 from chart_studio.session import sign_in
 from chart_studio.tests.test_plot_ly.test_api import PlotlyApiTestCase
+from chart_studio.api.v2.utils import should_retry
 
 
 class MakeParamsTest(PlotlyApiTestCase):
@@ -238,3 +239,33 @@ class RequestTest(PlotlyApiTestCase):
 
         utils.request(self.method, self.url)
         assert self.request_mock.call_count == 1
+
+
+class ShouldRetryTest(PlotlyApiTestCase):
+    def test_retry_on_500_error(self):
+        exception = PlotlyRequestError(message="Server Error", status_code=500, content=b"")
+        self.assertEqual(should_retry(exception), True)
+
+    def test_retry_on_503_error(self):
+        exception = PlotlyRequestError(message="Service Unavailable", status_code=503, content=b"")
+        self.assertEqual(should_retry(exception), True)
+
+    def test_retry_on_429_error(self):
+        exception = PlotlyRequestError(message="Too Many Requests", status_code=429, content=b"")
+        self.assertEqual(should_retry(exception), True)
+
+    def test_retry_on_specific_message(self):
+        exception = PlotlyRequestError(message="Uh oh, an error occurred", status_code=400, content=b"")
+        self.assertEqual(should_retry(exception), True)
+
+    def test_do_not_retry_on_400_error(self):
+        exception = PlotlyRequestError(message="Bad Request", status_code=400, content=b"")
+        self.assertEqual(should_retry(exception), False)
+
+    def test_do_not_retry_on_404_error(self):
+        exception = PlotlyRequestError(message="Not Found", status_code=404, content=b"")
+        self.assertEqual(should_retry(exception), False)
+
+    def test_do_not_retry_on_unrelated_message(self):
+        exception = PlotlyRequestError(message="Some other error", status_code=400, content=b"")
+        self.assertEqual(should_retry(exception), False)
