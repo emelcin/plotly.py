@@ -12,6 +12,14 @@ class TestSession(PlotlyTestCase):
         super(TestSession, self).setUp()
         session._session["plot_options"].clear()
 
+    def test_invalid_key(self):
+        kwargs = {"invalid_key": str}
+        self.assertRaises(PlotlyError, update_session_plot_options, **kwargs)
+
+    def test_invalid_type_for_valid_key(self):
+        kwargs = {"filename": 12345}
+        self.assertRaises(PlotlyError, update_session_plot_options, **kwargs)
+
     def test_update_session_plot_options_invalid_sharing_argument(self):
 
         # Return PlotlyError when sharing arguement is not

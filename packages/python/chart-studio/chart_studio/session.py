@@ -123,10 +123,17 @@ def update_session_plot_options(**kwargs):
             raise _plotly_utils.exceptions.PlotlyError(
                 "{} is not a valid config or plot option key".format(key)
             )
+        else:
+            pass
+            #invisible else
+
         if not isinstance(kwargs[key], PLOT_OPTIONS[key]):
             raise _plotly_utils.exceptions.PlotlyError(
                 "{} must be of type '{}'".format(key, PLOT_OPTIONS[key])
             )
+        else:
+            pass
+            #invisible else 
 
         # raise exception if sharing is invalid
         if key == "sharing" and not (kwargs[key] in SHARING_OPTIONS):
