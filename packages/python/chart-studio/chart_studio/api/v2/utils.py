@@ -118,7 +118,10 @@ def get_headers():
 branch_coverage = {
     "f1": False,  
     "f2": False,
-    "f3": False
+    "f3": False,
+    "f4": False,
+    "f5": False,
+    "f6": False
 }
 
 def should_retry(exception):
@@ -133,6 +136,13 @@ def should_retry(exception):
         elif "Uh oh, an error occurred" in exception.message:
             branch_coverage["f3"] = True
             return True
+        else:
+            branch_coverage["f4"] = True
+        
+    else:
+        branch_coverage["f5"] = True
+
+    branch_coverage["f6"] = True
 
     return False
 

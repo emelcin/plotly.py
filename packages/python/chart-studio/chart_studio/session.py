@@ -48,7 +48,14 @@ branch_coverage = {
     "f1": False,
     "f2": False,
     "f3": False,
-    "f4": False
+    "f4": False,
+    "f5": False,
+    "f6": False,
+    "f7": False,
+    "f8": False,
+    "f9": False,
+    "f10": False,
+    "f11": False
 }
 
 def sign_in(username, api_key, **kwargs):
@@ -84,35 +91,53 @@ def sign_in(username, api_key, **kwargs):
                 "{} is not a valid config or credentials key".format(key)
             )
 
+        else:
+            branch_coverage["f2"] = True
+
     # add credentials, raise error if type is wrong.
     for key in CREDENTIALS_KEYS:
         if key in kwargs:
             if not isinstance(kwargs[key], CREDENTIALS_KEYS[key]):
-                branch_coverage["f2"] = True
+                branch_coverage["f3"] = True
                 raise _plotly_utils.exceptions.PlotlyError(
                     "{} must be of type '{}'".format(key, CREDENTIALS_KEYS[key])
                 )
+            else:
+                branch_coverage["f4"] = True
             _session["credentials"][key] = kwargs[key]
+
+        else:
+            branch_coverage["f5"] = True
 
     # add config, raise error if type is wrong.
     for key in CONFIG_KEYS:
         if key in kwargs:
             if not isinstance(kwargs[key], CONFIG_KEYS[key]):
-                branch_coverage["f3"] = True
+                branch_coverage["f6"] = True
                 raise _plotly_utils.exceptions.PlotlyError(
                     "{} must be of type '{}'".format(key, CONFIG_KEYS[key])
                 )
+            else:
+                branch_coverage["f7"] = True
+
             _session["config"][key] = kwargs.get(key)
+        else:
+            branch_coverage["f8"] = True
 
     # add plot options, raise error if type is wrong.
     for key in PLOT_OPTIONS:
         if key in kwargs:
             if not isinstance(kwargs[key], CONFIG_KEYS[key]):
-                branch_coverage["f4"] = True
+                branch_coverage["f9"] = True
                 raise _plotly_utils.exceptions.PlotlyError(
                     "{} must be of type '{}'".format(key, CONFIG_KEYS[key])
                 )
+            else:
+                branch_coverage["f10"] = True
             _session["plot_options"][key] = kwargs.get(key)
+
+        else:
+            branch_coverage["f11"] = True
 
 
 def update_session_plot_options(**kwargs):

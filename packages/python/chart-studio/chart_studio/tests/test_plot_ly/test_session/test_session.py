@@ -35,11 +35,13 @@ class TestSession(PlotlyTestCase):
             self.assertEqual(_session["plot_options"], kwargs)
 
 class Testing(PlotlyTestCase):
-    def set_up(self):
-        super(TestSession, self).setUp()
-        session._session["credentials"].clear()
-        session._session["config"].clear()
-        session._session["plot_options"].clear()
+
+    def test_sign_in_invalid_key_not_in_kwargs(self):
+        with self.assertRaises(PlotlyError) as context:
+            sign_in(username="test_user", api_key="test_key", some_invalid_key="value")
+        self.assertEqual(
+            str(context.exception), "some_invalid_key is not a valid config or credentials key"
+        )
 
     def test_sign_in_valid_credentials(self):
         sign_in(username="test_user", api_key="test_key")
@@ -73,13 +75,6 @@ class Testing(PlotlyTestCase):
             str(context.exception), "plotly_ssl_verification must be of type '<class 'bool'>'"
         )
 
-    def test_sign_in_partial_update(self):
-        sign_in(username="test_user", api_key="test_key")
-        sign_in(username="new_user")
-        credentials = get_session_credentials()
-        self.assertEqual(credentials["username"], "new_user")
-        self.assertEqual(credentials["api_key"], "test_key")
-
     def test_sign_in_valid_plot_options(self):
         sign_in(username="test_user", api_key="test_key", filename="test_file")
         plot_options = session._session["plot_options"]
@@ -91,3 +86,10 @@ class Testing(PlotlyTestCase):
         self.assertEqual(
             str(context.exception), "filename must be of type '<class 'str'>'"
         )
+
+    def test_sign_in_partial_update(self):
+        sign_in(username="test_user", api_key="test_key")
+        sign_in(username="new_user")
+        credentials = get_session_credentials()
+        self.assertEqual(credentials["username"], "new_user")
+        self.assertEqual(credentials["api_key"], "test_key")

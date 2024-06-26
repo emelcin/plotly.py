@@ -247,25 +247,25 @@ class ShouldRetryTest(PlotlyApiTestCase):
         self.assertEqual(should_retry(exception), True)
 
     def test_retry_on_503_error(self):
-        exception = PlotlyRequestError(message="Service Unavailable", status_code=503, content=b"")
+        exception = PlotlyRequestError(message="Unavailable Service", status_code=503, content=b"")
         self.assertEqual(should_retry(exception), True)
 
     def test_retry_on_429_error(self):
-        exception = PlotlyRequestError(message="Too Many Requests", status_code=429, content=b"")
+        exception = PlotlyRequestError(message="Too Many Reqs", status_code=429, content=b"")
         self.assertEqual(should_retry(exception), True)
 
     def test_retry_on_specific_message(self):
         exception = PlotlyRequestError(message="Uh oh, an error occurred", status_code=400, content=b"")
         self.assertEqual(should_retry(exception), True)
 
-    def test_do_not_retry_on_400_error(self):
-        exception = PlotlyRequestError(message="Bad Request", status_code=400, content=b"")
+    def test_retry_on_499_error(self):
+        exception = PlotlyRequestError(message="Bad Request", status_code=499, content=b"")
         self.assertEqual(should_retry(exception), False)
 
-    def test_do_not_retry_on_404_error(self):
+    def test_retry_on_404_error(self):
         exception = PlotlyRequestError(message="Not Found", status_code=404, content=b"")
         self.assertEqual(should_retry(exception), False)
 
-    def test_do_not_retry_on_unrelated_message(self):
-        exception = PlotlyRequestError(message="Some other error", status_code=400, content=b"")
+    def test_retry_on_Not_Instance(self):
+        exception = "Not an insatnce of Plotly Request Error"
         self.assertEqual(should_retry(exception), False)
