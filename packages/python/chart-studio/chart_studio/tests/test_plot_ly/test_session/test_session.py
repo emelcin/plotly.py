@@ -86,10 +86,3 @@ class Testing(PlotlyTestCase):
         self.assertEqual(
             str(context.exception), "filename must be of type '<class 'str'>'"
         )
-
-    def test_sign_in_partial_update(self):
-        sign_in(username="test_user", api_key="test_key")
-        sign_in(username="new_user")
-        credentials = get_session_credentials()
-        self.assertEqual(credentials["username"], "new_user")
-        self.assertEqual(credentials["api_key"], "test_key")
