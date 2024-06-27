@@ -4,6 +4,16 @@ from pprint import PrettyPrinter
 from _plotly_utils.utils import *
 from _plotly_utils.data_utils import *
 
+
+branch_coverage = {
+    "is_list": False,
+    "is_tuple": False,
+    "invalid_type": False,
+    "len_lower_than_threshold": False,
+    "len_greater_than_threshold": False
+}
+
+
 # Pretty printing
 def _list_repr_elided(v, threshold=200, edgeitems=3, indent=0, width=80):
     """
@@ -22,15 +32,20 @@ def _list_repr_elided(v, threshold=200, edgeitems=3, indent=0, width=80):
     str
     """
     if isinstance(v, list):
+        branch_coverage["is_list"] = True
         open_char, close_char = "[", "]"
     elif isinstance(v, tuple):
+        branch_coverage["is_tuple"] = True
         open_char, close_char = "(", ")"
     else:
+        branch_coverage["invalid_type"] = True
         raise ValueError("Invalid value of type: %s" % type(v))
 
     if len(v) <= threshold:
+        branch_coverage["len_lower_than_threshold"] = True
         disp_v = v
     else:
+        branch_coverage["len_greater_than_threshold"] = True
         disp_v = list(v[:edgeitems]) + ["..."] + list(v[-edgeitems:])
 
     v_str = open_char + ", ".join([str(e) for e in disp_v]) + close_char
@@ -44,6 +59,11 @@ def _list_repr_elided(v, threshold=200, edgeitems=3, indent=0, width=80):
         )
     ).strip()
     return v_wrapped
+
+def write_coverage_to_file(file_path="branch_coverage1.txt"):
+    with open(file_path, "w") as f:  
+        for branch, hit in branch_coverage.items():
+            f.write(f"{branch} was {'hit' if hit else 'not hit'}\n")
 
 
 class ElidedWrapper(object):
