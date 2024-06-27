@@ -104,7 +104,44 @@ def sign_in(username, api_key, **kwargs):
                 )
             _session["plot_options"][key] = kwargs.get(key)
 
-            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 branch_coverage = {
     "update_session_plot_options_invalid_key": False,
     "update_session_plot_options_invalid_key_else": False,

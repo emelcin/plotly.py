@@ -7,6 +7,59 @@ from chart_studio.session import update_session_plot_options, SHARING_OPTIONS, b
 from _plotly_utils.exceptions import PlotlyError
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 class TestSession(PlotlyTestCase):
     def setUp(self):
         super(TestSession, self).setUp()
