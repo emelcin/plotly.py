@@ -1,4 +1,5 @@
 from plotly.utils import _list_repr_elided
+from plotly.utils import write_coverage_to_file
 
 
 def test_list_repr_elided():
@@ -21,3 +22,6 @@ def test_list_repr_elided():
     except ValueError as e:
         assert str(e) == "Invalid value of type: <class 'set'>"
 
+def test_print_coverage_to_file():
+    write_coverage_to_file(file_path="branch_coverage1.txt")
+    

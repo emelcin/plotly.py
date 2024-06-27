@@ -1,5 +1,6 @@
 from plotly.tools import _replace_newline
 from plotly.tests.utils import TestCaseNoTemplate
+from plotly.tools import write_coverage_to_file
 
 
 class TestReplaceNewline(TestCaseNoTemplate):
@@ -29,4 +30,7 @@ class TestReplaceNewline(TestCaseNoTemplate):
         input_number = 12345
         expected_output = 12345
         self.assertEqual(_replace_newline(input_number), expected_output)
-        
+
+def test_print_coverage_to_file():
+    write_coverage_to_file(file_path="branch_coverage2.txt")
+    

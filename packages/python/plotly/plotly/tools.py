@@ -494,19 +494,30 @@ def get_graph_obj(obj, obj_type=None):
     return cls(obj)
 
 
+branch_coverage = {
+    "replace_newline_dict": False,     
+    "replace_newline_list": False,   
+    "replace_newline_str": False,     
+    "replace_newline_else": False     
+}
+
+
 def _replace_newline(obj):
     """Replaces '\n' with '<br>' for all strings in a collection."""
     if isinstance(obj, dict):
+        branch_coverage["replace_newline_dict"] = True
         d = dict()
         for key, val in list(obj.items()):
             d[key] = _replace_newline(val)
         return d
     elif isinstance(obj, list):
+        branch_coverage["replace_newline_list"] = True
         l = list()
         for index, entry in enumerate(obj):
             l += [_replace_newline(entry)]
         return l
     elif isinstance(obj, str):
+        branch_coverage["replace_newline_str"] = True
         s = obj.replace("\n", "<br>")
         if s != obj:
             warnings.warn(
@@ -519,7 +530,14 @@ def _replace_newline(obj):
             )
         return s
     else:
+        branch_coverage["replace_newline_else"] = True
         return obj  # we return the actual reference... but DON'T mutate.
+
+def write_coverage_to_file(file_path="branch_coverage2.txt"):
+    with open(file_path, "w") as f:
+        for branch, hit in branch_coverage.items():
+            f.write(f"{branch} was {'hit' if hit else 'not hit'}\n")
+
 
 
 def return_figure_from_figure_or_data(figure_or_data, validate_figure):
