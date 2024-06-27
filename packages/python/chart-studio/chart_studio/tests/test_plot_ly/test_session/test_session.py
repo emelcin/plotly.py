@@ -3,7 +3,7 @@ from __future__ import absolute_import
 from chart_studio.tests.utils import PlotlyTestCase
 
 from chart_studio import session
-from chart_studio.session import update_session_plot_options, SHARING_OPTIONS
+from chart_studio.session import update_session_plot_options, SHARING_OPTIONS, branch_coverage, print_coverage_to_file_session
 from _plotly_utils.exceptions import PlotlyError
 
 
@@ -40,3 +40,6 @@ class TestSession(PlotlyTestCase):
             update_session_plot_options(**kwargs)
 
             self.assertEqual(_session["plot_options"], kwargs)
+        
+    def test_zprint_coverage_to_file_session(self):
+        print_coverage_to_file_session('coverage2.txt')

@@ -104,6 +104,16 @@ def sign_in(username, api_key, **kwargs):
                 )
             _session["plot_options"][key] = kwargs.get(key)
 
+            
+branch_coverage = {
+    "update_session_plot_options_invalid_key": False,
+    "update_session_plot_options_invalid_key_else": False,
+    "update_session_plot_options_wrong_type": False,
+    "update_session_plot_options_wrong_type_else": False,
+    "update_session_plot_options_invalid_sharing": False,
+    "update_session_plot_options_invalid_sharing_else": False
+}
+
 
 def update_session_plot_options(**kwargs):
     """
@@ -120,30 +130,39 @@ def update_session_plot_options(**kwargs):
     # raise exception if key is invalid or value is the wrong type
     for key in kwargs:
         if key not in PLOT_OPTIONS:
+            branch_coverage["update_session_plot_options_invalid_key"] = True
             raise _plotly_utils.exceptions.PlotlyError(
                 "{} is not a valid config or plot option key".format(key)
             )
         else:
-            pass
-            #invisible else
+            branch_coverage["update_session_plot_options_invalid_key_else"] = True
 
         if not isinstance(kwargs[key], PLOT_OPTIONS[key]):
+            branch_coverage["update_session_plot_options_wrong_type"] = True
             raise _plotly_utils.exceptions.PlotlyError(
                 "{} must be of type '{}'".format(key, PLOT_OPTIONS[key])
             )
         else:
-            pass
-            #invisible else 
+            branch_coverage["update_session_plot_options_wrong_type_else"] = True
 
         # raise exception if sharing is invalid
         if key == "sharing" and not (kwargs[key] in SHARING_OPTIONS):
+            branch_coverage["update_session_plot_options_invalid_sharing"] = True
             raise _plotly_utils.exceptions.PlotlyError(
                 "'{0}' must be of either '{1}', '{2}'"
                 " or '{3}'".format(key, *SHARING_OPTIONS)
             )
+        else:
+            branch_coverage["update_session_plot_options_invalid_sharing_else"] = True
+
 
     # update local _session dict with new plot options
     _session["plot_options"].update(kwargs)
+
+def print_coverage_to_file_session(filepath='coverage2.txt'):
+    with open(filepath, 'w') as file:
+        for branch, hit in branch_coverage.items():
+            file.write(f"{branch}: {'hit' if hit else 'not hit'}\n")
 
 
 def get_session_plot_options():

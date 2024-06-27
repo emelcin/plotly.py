@@ -1,0 +1,6 @@
+update_session_plot_options_invalid_key: hit
+update_session_plot_options_invalid_key_else: hit
+update_session_plot_options_wrong_type: hit
+update_session_plot_options_wrong_type_else: hit
+update_session_plot_options_invalid_sharing: hit
+update_session_plot_options_invalid_sharing_else: hit
