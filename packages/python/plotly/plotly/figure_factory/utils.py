@@ -181,6 +181,14 @@ def endpts_to_intervals(endpts):
         return intervals
 
 
+branch_coverage_annotation = {
+    "not_flipped_col": False,
+    "not_flipped_row": False,
+    "flipped_col": False,
+    "flipped_row_right_side": False,
+    "flipped_row_left_side": False
+}
+
 def annotation_dict_for_label(
     text,
     lane,
@@ -212,15 +220,18 @@ def annotation_dict_for_label(
         xanchor = "center"
         yanchor = "middle"
         if row_col == "col":
+            branch_coverage_annotation["not_flipped_col"] = True
             x = (lane - 1) * (l + subplot_spacing) + 0.5 * l
             y = 1.03
             textangle = 0
         elif row_col == "row":
+            branch_coverage_annotation["not_flipped_row"] = True
             y = (lane - 1) * (l + subplot_spacing) + 0.5 * l
             x = 1.03
             textangle = 90
     else:
         if row_col == "col":
+            branch_coverage_annotation["flipped_col"] = True
             xanchor = "center"
             yanchor = "bottom"
             x = (lane - 1) * (l + subplot_spacing) + 0.5 * l
@@ -230,9 +241,11 @@ def annotation_dict_for_label(
             yanchor = "middle"
             y = (lane - 1) * (l + subplot_spacing) + 0.5 * l
             if right_side:
+                branch_coverage_annotation["flipped_row_right_side"] = True
                 x = 1.0
                 xanchor = "left"
             else:
+                branch_coverage_annotation["flipped_row_left_side"] = True
                 x = -0.01
                 xanchor = "right"
             textangle = 0
@@ -250,6 +263,11 @@ def annotation_dict_for_label(
         font=dict(size=13, color=text_color),
     )
     return annotation_dict
+
+def print_coverage_to_file(filepath='coverage.txt'):
+    with open(filepath, 'w') as file:
+        for branch, hit in branch_coverage_annotation.items():
+            file.write(f"{branch}: {'hit' if hit else 'not hit'}\n")
 
 
 def list_of_options(iterable, conj="and", period=True):

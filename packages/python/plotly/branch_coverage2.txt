@@ -1,0 +1,4 @@
+replace_newline_dict was hit
+replace_newline_list was hit
+replace_newline_str was hit
+replace_newline_else was hit
