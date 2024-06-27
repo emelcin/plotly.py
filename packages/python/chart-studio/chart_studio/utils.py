@@ -110,14 +110,25 @@ def get_first_duplicate(items):
             return item
     return None
 
+branch_coverage = {
+    "is_source_key_match": False,
+    "is_source_key_no_match": False
+}
 
 ### source key
 def is_source_key(key):
     src_regex = re.compile(r".+src$")
     if src_regex.match(key) is not None:
+        branch_coverage["is_source_key_match"] = True
         return True
     else:
+        branch_coverage["is_source_key_no_match"] = True
         return False
+    
+def print_coverage_to_file_source_key(filepath='coverage1.txt'):
+    with open(filepath, 'w') as file:
+        for branch, hit in branch_coverage.items():
+            file.write(f"{branch}: {'hit' if hit else 'not hit'}\n")
 
 
 ### validation
